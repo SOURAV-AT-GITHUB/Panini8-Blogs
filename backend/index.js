@@ -1,6 +1,7 @@
 const express = require("express")
 const cors = require("cors")
 require("dotenv").config()
+const DatabaseConnection = require("./config/database.config")
 const PORT = process.env.PORT || 3001
 const app = express()
 app.use(express.json())
@@ -12,6 +13,12 @@ app.get("/",(req,res)=>{
 
 
 
-app.listen(PORT,()=>{
-    console.log(`Server running on ${PORT}`)
+app.listen(PORT,async()=>{
+    try {
+        console.log(`Server running on ${PORT}`)
+        await DatabaseConnection
+        console.log("Database connected")
+    } catch (error) {
+        console.log('Failed to connect to database',error.message)
+    }
 })
