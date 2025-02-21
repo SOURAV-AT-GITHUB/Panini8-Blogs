@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
 @theme{
-  --color-primary: #3CAB7D;
+  --color-primary: #58B58F;
+}
+#root{
+  background-image: url("/Other-files/auth-bg.svg");
+  background-position: center;
+  background-size: cover;
+  
 }

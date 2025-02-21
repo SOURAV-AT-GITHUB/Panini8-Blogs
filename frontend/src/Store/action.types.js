@@ -1,0 +1,7 @@
+export const AUTH_REQUEST = "AUTH_REQUEST"
+export const AUTH_SUCCESS = "AUTH_SUCCESS"
+export const AUTH_FAILED = "AUTH_FAILED"
+export const AUTH_SIGN_OUT = "AUTH_SIGN_OUT"
+
+export const OPEN_SNACKBAR = "OPEN_SNACKBAR"
+export const CLOSE_SNACKBAR = "CLOSE_SNACKBAR"
