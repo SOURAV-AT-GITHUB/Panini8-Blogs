@@ -107,7 +107,7 @@ export default function BlogWithActions({ blog, token }) {
     }
   }
   return (
-    <div className="flex flex-col sm:flex-row justify-between mr-1 gap-2 p-2 border border-slate-300 rounded-md">
+    <div className="flex flex-col sm:flex-row justify-between mr-1 gap-2 p-2 border border-slate-300 rounded-md ">
       <div className="flex flex-col gap-2">
         <h4 className="text-xl font-medium">Blog title : {blog.title}</h4>
         <div className="flex text-xs">
@@ -122,30 +122,21 @@ export default function BlogWithActions({ blog, token }) {
         </div>
       </div>
 
-      <div className="flex flex-col">
-        <div className="flex justify-between  h-2/4 ">
-          <button onClick={openEditDialog}>
+
+        <div className="flex justify-between items-center gap-6 min-w-1/5 p-2">
+          <button onClick={openEditDialog} className="bg-yellow-400 text-white p-1 rounded-md w-2/4">
             <EditNoteIcon fontSize="large" />
+            <p>Edit</p>
           </button>
-          <button onClick={openDeleteDialog}>
+          <button onClick={openDeleteDialog} className="bg-red-500 text-white p-1 rounded-md w-2/4">
             <DeleteIcon fontSize="large" />
+            <p>Delete</p>
           </button>
         </div>
+      
 
-        <div className="flex gap-2 h-2/4">
-          <div className="flex  items-center gap-1">
-            <ThumbUpIcon className="-scale-x-100" />
-            <p>{blog.likes.length}</p>
-          </div>
-          <div className="flex  items-center gap-1">
-            <CommentIcon className="-scale-x-100" />
-            <p>{blog.comments.length}</p>
-          </div>
-        </div>
-      </div>
-
-      <Dialog open={isDeleteDialogOpen} onClose={closeDeleteDialog}>
-        <div className="w-screen max-w-lg p-4 rounded-md shadow-lg bg-white flex flex-col gap-4">
+      <Dialog open={isDeleteDialogOpen} fullWidth onClose={closeDeleteDialog}>
+        <div className="w-full p-4 rounded-md shadow-lg bg-white flex flex-col gap-4">
           <div className="flex justify-between gap-6">
             <div className="text-2xl font-medium ">
               <h4>Are you sure want to delete this blog ?</h4>
@@ -195,8 +186,8 @@ export default function BlogWithActions({ blog, token }) {
         </div>
       </Dialog>
 
-      <Dialog open={isEditDialogOpen} onClose={closeEditDialog}>
-        <div className="w-screen max-w-lg p-4 rounded-md shadow-lg bg-white flex flex-col gap-4">
+      <Dialog open={isEditDialogOpen} onClose={closeEditDialog} fullWidth >
+        <div className="w-full h-fit p-4 rounded-md shadow-lg  flex flex-col gap-4">
           <div className="flex justify-between gap-6">
             <h4 className="text-2xl font-medium ">Edit Blog</h4>
             <button disabled={isSubmitting} onClick={closeEditDialog}>
@@ -230,7 +221,7 @@ export default function BlogWithActions({ blog, token }) {
                   setFormData((prev) => ({ ...prev, content: e.target.value }))
                 }
                 placeholder="Enter blog content"
-                className="border border-slate-400 p-2 min-h-32 rounded-md"
+                className="border border-slate-400 p-2 min-h-32 max-h-56 rounded-md"
               />
             </div>
             {/* <div className="flex flex-col gap-2">

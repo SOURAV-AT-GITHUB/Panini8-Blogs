@@ -11,8 +11,11 @@ import CommentIcon from "@mui/icons-material/Comment";
 import ShareIcon from "@mui/icons-material/Share";
 import BlogSkeleton from "../../components/BlogSkeleton";
 import SendIcon from "@mui/icons-material/Send";
+import { CircularProgress } from "@mui/material";
 export default function SingleBlog() {
-  const { token, id } = useSelector((store) => store.auth);
+  const { token, id, first_name, last_name } = useSelector(
+    (store) => store.auth
+  );
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { blog_id } = useParams();
@@ -42,6 +45,7 @@ export default function SingleBlog() {
         headers: { Authorization: `Bearer ${token}` },
       });
       setBlog(response.data.data);
+      console.log(response.data);
     } catch (error) {
       dispatch(
         openSnackbar(error.response?.data.message || error.message, "error")
@@ -81,37 +85,44 @@ export default function SingleBlog() {
   }
   async function postComment(event) {
     event.preventDefault();
-    setIsSubmitting(true)
+    setIsSubmitting(true);
     try {
       const response = await axios.post(
         `${BACKEND_URL}/blog/comment/${blog._id.toString()}`,
         { comment: event.target[0].value },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      dispatch(openSnackbar(response.data.message,'success'))
-      setBlog(prev=>({...prev,comments:[...prev.comments,response.data.data]}))
-      event.target[0].value=""
+      dispatch(openSnackbar(response.data.message, "success"));
+      setBlog((prev) => ({
+        ...prev,
+        comments: [
+          ...prev.comments,
+          { ...response.data.data, first_name, last_name, image: null },
+        ],
+      }));
+      event.target[0].value = "";
     } catch (error) {
-      
-      dispatch(openSnackbar(error.response?.data.message || error.message,'error'))
-    }finally{
-      setIsSubmitting(false)
+      dispatch(
+        openSnackbar(error.response?.data.message || error.message, "error")
+      );
+    } finally {
+      setIsSubmitting(false);
     }
   }
   /*___________useEffects */
   useEffect(() => {
     document.title = "Blog | Panini8 Blogs";
     if (!token) navigate("/singin");
-    // if (token) fetchBlog();
+    if (token) fetchBlog();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token, blog_id]);
   return (
-    <main className="z-0 mt-15 pt-3 flex flex-col items-center gap-4 px-20 h-[90vh] w-full overflow-hidden">
-      <section className="relative bg-white border border-slate-300 w-full max-w-lg p-2 rounded-md shadow-md">
+    <main className="relative z-0 mt-15 pt-3 flex flex-col items-center gap-4 px-4 md:px-20 min-h-[90vh] w-full  ">
+      <section className=" relative flex flex-col bg-white border border-slate-300 w-full max-w-[768px] p-2 rounded-md shadow-md">
         {isFetching ? (
           <BlogSkeleton />
         ) : blog ? (
-          <section className="flex flex-col gap-1">
+          <section className="flex flex-col gap-1 h-full">
             <article className="flex flex-col mr-1 gap-2 p-2 border border-slate-300 rounded-md">
               <div className="flex gap-2 items-center">
                 <img
@@ -150,7 +161,7 @@ export default function SingleBlog() {
                   className="m-auto min-h-[300px]"
                 />
               )} */}
-              <p className="line-clamp-2">{blog.content}</p>
+              <p >{blog.content}</p>
               <div className="flex justify-evenly gap-8 p-4 pb-2">
                 <button
                   onClick={toggleLike}
@@ -182,20 +193,64 @@ export default function SingleBlog() {
               </div>
             </article>
 
-            <section className="p-2 border border-slate-300 rounded-sm">
-              <form id="comment-form" onSubmit={postComment} className="flex items-center gap-2">
+            <section className="relative p-2 border flex flex-col gap-2 border-slate-300 rounded-sm  ">
+              <section className="sticky top-15 p-3 rounded-md bg-white">
+              <h4 className=" text-2xl font-medium">Comments</h4>
+              <form
+                id="comment-form"
+                onSubmit={postComment}
+                className="flex items-center gap-2 mt-2"
+              >
                 <textarea
-                  name=""
-                  id=""
-                  className="w-4/5 border border-slate-400 min-h-12 max-h-24"
+                placeholder="Comment"
+                  className="w-5/6 pl-2 pt-4 border border-slate-400 rounded-md min-h-14 max-h-24"
                 ></textarea>
                 <button
                   type="submit"
-                  className="w-1/5 text-lg h-12 self-end p-1 px-2 rounded-full bg-primary text-white"
+                  disabled={isSumbitting}
+                  className="w-1/6 text-lg  self-end p-2 rounded-2xl bg-primary text-white"
                 >
-                  <SendIcon fontSize="large" />
+                  {isSumbitting ? (
+                    <CircularProgress color="" />
+                  ) : (
+                    <SendIcon fontSize="large" />
+                  )}
                 </button>
               </form>
+
+              </section>
+              <section className="flex flex-col gap-2  ">
+                {blog.comments.map((comment, index) => (
+                  <div
+                    key={index}
+                    className="flex flex-col gap-2 p-2 border border-slate-300 rounded-md"
+                  >
+                    <div className=" flex gap-2 items-center  ">
+                      <img
+                        src={comment.author.image || dummyImage}
+                        alt={`${comment.author.first_name} ${comment.author.last_name}`}
+                        className="w-12 rounded-full"
+                      />
+
+                      <div className="flex flex-col ">
+                        <h3 className="text-xl font-medium">{`${comment.author.first_name} ${comment.author.last_name}`}</h3>
+                        <div className="flex flex-col ">
+                          <p className="text-[10px]">
+                            {formatDateTime(comment.createdAt)[0]}
+                          </p>
+                          <p className="text-[10px]">
+                            {formatDateTime(comment.createdAt)[1]}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div>
+                      <p className="text-lg">{comment.comment}</p>
+                    </div>
+                  </div>
+                ))}
+              </section>
+              
             </section>
           </section>
         ) : (
