@@ -115,8 +115,8 @@ export default function SingleBlog() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token, blog_id]);
   return (
-    <main className="relative z-0 mt-15 pt-3 flex flex-col items-center gap-4 px-4 md:px-20 min-h-[90vh] w-full  ">
-      <section className=" relative flex flex-col bg-white border border-slate-300 w-full max-w-[768px] p-2 rounded-md shadow-md">
+    <main className="relative z-0 mt-15 pt-3 flex flex-col items-center gap-4 px-2 lg:px-16 min-h-[90vh] w-full  ">
+      <section className=" relative flex flex-col bg-white  w-full max-w-[768px] p-2">
         {isFetching ? (
           <BlogSkeleton />
         ) : blog ? (

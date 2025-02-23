@@ -24,13 +24,13 @@ export default function Profile() {
   }, [token]);
   return (
     <main className="z-0 mt-15 pt-3 flex flex-col sm:flex-row gap-4 sm:px-20 min-h-[90vh] ">
-      <section className="bg-white sm:w-1/4 h-fit p-4 py-5 rounded-md flex flex-col gap-4 border border-slate-300 shadow-xl">
+      <section className="bg-white text-center sm:w-1/4 h-fit p-4 py-5 rounded-md flex flex-col gap-4 border border-slate-300 shadow-xl">
         <img
           src={dummyImage}
           alt={`${first_name} ${last_name}`}
-          className="rounded-full"
+          className="rounded-full max-w-32 m-auto"
         />
-        <p className="text-primary text-2xl font-semibold text-center">
+        <p className="text-primary text-2xl font-semibold ">
           {first_name} {last_name}
         </p>
 

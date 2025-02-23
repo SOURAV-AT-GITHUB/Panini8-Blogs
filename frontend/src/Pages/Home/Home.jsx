@@ -63,19 +63,20 @@ export default function Home() {
   }, [token]);
 
   return (
-    <main className="z-0 mt-16 pt-3 flex gap-4  lg:px-16 h-[90vh] overflow-hidden">
-      <section className="bg-white w-1/5 h-fit p-4 py-5 rounded-md flex flex-col gap-4 border border-slate-300 shadow-xl">
+    <main id="home-main" className="z-0 mt-16 pt-3 md:flex gap-4 px-2 lg:px-16 min-h-[90vh] md:max-h-[90vh] md:overflow-hidden">
+      <section className="bg-white md:w-1/5 h-fit p-4 py-5 rounded-md flex flex-col gap-4 border border-slate-300 shadow-xl">
         <p className="text-primary text-2xl font-semibold text-center">
           Hello, {first_name} {last_name}
         </p>
-        <NavLink to="/create-blog" className="w-fit">
+        
+
+        <ul className="flex  items-center justify-center md:flex-col md:items-start gap-2">
+          <NavLink to="/create-blog" className="w-fit hidden md:block">
           <button className="flex items-center gap-1 p-2 px-4 min-w-[75px] rounded-full border border-primary shadow-md hover:scale-110 transition-transform duration-200 ease-in-out">
             <p>Create Blog</p>
             <AddIcon />
           </button>
         </NavLink>
-
-        <ul className="flex flex-col gap-2">
           <li>
             <button
               onClick={refreshFeed}
@@ -85,13 +86,14 @@ export default function Home() {
             </button>
           </li>
           <li>
-            <NavLink to="/profile">
+            <NavLink to="/profile" className='hidden md:block'>
               <p className="w-fit text-primary p-1 px-2 rounded-md border border-primary hover:scale-110 transition-transform duration-200 ease-in-out">
                 My blogs
               </p>
             </NavLink>
           </li>
-          <li className="flex flex-col gap-2">
+        </ul>
+          <div className="flex flex-col gap-2 max-w-[300px] m-auto">
             <p>Get blogs by tag</p>
             <form onSubmit={handleSeachByTag} className="flex flex-col gap-2">
               <input
@@ -110,11 +112,10 @@ export default function Home() {
                 Search
               </button>
             </form>
-          </li>
-        </ul>
+          </div>
       </section>
 
-      <section className="w-4/5 bg-white  rounded-md flex flex-col border border-slate-300 shadow-xl">
+      <section className="md:w-4/5 bg-white  rounded-md flex flex-col border border-slate-300 shadow-xl">
         <h2 className="text-3xl text-center text-primary font-semibold shadow-md p-2 ">
           {heading}
         </h2>

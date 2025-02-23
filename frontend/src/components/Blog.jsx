@@ -1,19 +1,20 @@
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import CommentIcon from "@mui/icons-material/Comment";
 import ShareIcon from "@mui/icons-material/Share";
-import VisibilityIcon from '@mui/icons-material/Visibility';
 import { useDispatch } from "react-redux";
 import { openSnackbar } from "../Store/actions";
 import { likeBlog, unlikeBlog } from "../Store/blogs.action";
 import axios from "axios";
 import { useState } from "react";
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+import {useNavigate} from 'react-router-dom'
 const dummyImage =
   "https://st4.depositphotos.com/3538469/23945/v/450/depositphotos_239459018-stock-illustration-user-sign-icon-person-symbol.jpg";
 /* eslint-disable react/prop-types */
 export default function Blog({ blog,userId, token }) {
   const dispatch = useDispatch();
   const [isToggling,setIsToggling] = useState(false)
+  const navigate = useNavigate()
   function formatDateTime(inputDate) {
     const date = new Date(inputDate);
 
@@ -25,7 +26,8 @@ export default function Blog({ blog,userId, token }) {
 
     return [timeString, dateString];
   }
-  async function toggleLike() {
+  async function toggleLike(e) {
+    e.stopPropagation()
     setIsToggling(true)
     try {
       if (blog.likes.includes(userId)) {
@@ -48,7 +50,7 @@ export default function Blog({ blog,userId, token }) {
     }
   }
   return (
-    <article className="flex flex-col mr-1 gap-2 p-2 border border-slate-300 rounded-md">
+    <article onClick={()=>navigate(`/blog/${blog._id.toString()}`)} className="flex flex-col mr-1 gap-2 p-2 border border-slate-300 rounded-md cursor-pointer">
       <div className="flex gap-2 items-center">
         <img
           src={blog.author.image || dummyImage}
@@ -82,7 +84,7 @@ export default function Blog({ blog,userId, token }) {
                   className="m-auto min-h-[300px]"
                 />
               )} */}
-      <p className="line-clamp-2">{blog.content}</p>
+      <p className="line-clamp-2">{blog.content} </p>
       <div className="flex justify-evenly gap-8 p-4 pb-2">
         <button
           onClick={toggleLike}
@@ -103,10 +105,7 @@ export default function Blog({ blog,userId, token }) {
           <CommentIcon fontSize="large" />
           <p>Comment</p>
         </a>
-        <a href={`/blog/${blog._id.toString()}`} className="flex flex-col items-center gap-2 p-1">
-          <VisibilityIcon fontSize="large" />
-          <p>Read full article</p>
-        </a>
+
         <button className="flex flex-col items-center gap-2 p-1">
           <ShareIcon fontSize="large" />
           <p>Share</p>
