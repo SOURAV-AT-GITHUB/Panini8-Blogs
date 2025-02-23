@@ -52,18 +52,18 @@ BlogRouter.get("/my-blogs", verifyToken, async (req, res) => {
   try {
     const blogs = await BlogModel.find({ author: req.user.id })
       .sort({ createdAt: -1 })
-      .populate({
-        path: "author",
-        select: "first_name last_name _id image",
-      })
-      .populate({
-        path: "comments",
-        select: "comment author",
-        populate: {
-          path: "author",
-          select: "first_name last_name _id image",
-        },
-      });
+      // .populate({
+      //   path: "author",
+      //   select: "first_name last_name _id image",
+      // })
+      // .populate({
+      //   path: "comments",
+      //   select: "comment author",
+      //   populate: {
+      //     path: "author",
+      //     select: "first_name last_name _id image",
+      //   },
+      // });
     return res.json({ data: blogs });
   } catch (error) {
     return res.status(500).json({ message: error.message });
@@ -164,6 +164,29 @@ BlogRouter.get("/blog-by-tag/:tag",verifyToken,async(req,res)=>{
     });
     if(!blogs.length || !blogs) return res.status(404).json({message:`No blogs found with "${tag}" tag!`})
       return res.json({message: `${blogs.length} blogs found with "${tag}" tag .`,data:blogs})
+  } catch (error) {
+    return res.status(500).json({message:error.message})
+  }
+})
+BlogRouter.get("/:blog_id",verifyToken,async(req,res)=>{
+  const {blog_id} = req.params
+  try {
+    const blog = await BlogModel.findById(blog_id).populate({
+      path:'author',
+      select:"first_name last_name _id image"
+    })
+    .populate({
+      path:'comments',
+      select:"comment author",
+      populate:{
+        path:"author",
+        select:"first_name last_name _id image"
+      }
+    })
+    
+    if(!blog) return res.status(400).json({message:"Blog not found"})
+      
+      return res.json({message:"Blog Found",data:blog})
   } catch (error) {
     return res.status(500).json({message:error.message})
   }
