@@ -6,7 +6,7 @@ import {
   UNLIKE_BLOG,
   POST_BLOG,
   DELETE_BLOG,
-  // EDIT_BLOG,
+  EDIT_BLOG,
   GET_MY_BLOGS_REQUEST,
   GET_MY_BLOGS_SUCCESS,
   GET_MY_BLOGS_ERROR,
@@ -67,9 +67,15 @@ export function myBlogsReducer(state = defaultState, { type, payload }) {
       return (state = { isError: null, isLoading: false, blogs: payload });
     case GET_MY_BLOGS_ERROR:
       return (state = { ...state, isError: payload, isLoading: false });
-    case DELETE_BLOG:{
-      const blogs = state.blogs.filter(blog=>blog._id!==payload)
-      return state = {blogs,isLoading:false,isError:null}
+    case DELETE_BLOG: {
+      const blogs = state.blogs.filter((blog) => blog._id !== payload);
+      return (state = { blogs, isLoading: false, isError: null });
+    }
+    case EDIT_BLOG: {
+      const updatedBlogs = state.blogs.map((blog) =>
+        blog._id.toString() === payload._id.toString() ? payload : blog
+      );
+      return (state = { isLoading: false, isError: null, blogs: updatedBlogs });
     }
     default:
       return state;

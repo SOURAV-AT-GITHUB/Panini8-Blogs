@@ -7,14 +7,14 @@ import {
   UNLIKE_BLOG,
   POST_BLOG,
   DELETE_BLOG,
-// EDIT_BLOG,
+EDIT_BLOG,
   GET_MY_BLOGS_REQUEST,
   GET_MY_BLOGS_SUCCESS,
   GET_MY_BLOGS_ERROR,
 } from "./action.types";
 import { openSnackbar } from "./actions";
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-
+//___________Global and local action functions
 export function getAllBlogs(token) {
   return async (dispatch) => {
     dispatch({ type: GET_ALL_BLOGS_REQUEST });
@@ -37,22 +37,6 @@ export function getAllBlogs(token) {
     }
   };
 }
-export function postBlog(blog) {
-  return (dispatch)=>{
-    dispatch({type:POST_BLOG,payload:blog})
-  }
-}
-export function likeBlog(blogId, userId) {
-  return (dispatch) => {
-    dispatch({ type: LIKE_BLOG, payload: { blogId, userId } });
-  };
-}
-export function unlikeBlog(blogId, userId) {
-  return (dispatch) => {
-    dispatch({ type: UNLIKE_BLOG, payload: { blogId, userId } });
-  };
-}
-
 export function getMyBlogs(token){
   return async (dispatch) => {
     dispatch({ type: GET_MY_BLOGS_REQUEST });
@@ -75,9 +59,29 @@ export function getMyBlogs(token){
     }
   };
 }
-
+//________Only local action functions
+export function likeBlog(blogId, userId) {
+  return (dispatch) => {
+    dispatch({ type: LIKE_BLOG, payload: { blogId, userId } });
+  };
+}
+export function unlikeBlog(blogId, userId) {
+  return (dispatch) => {
+    dispatch({ type: UNLIKE_BLOG, payload: { blogId, userId } });
+  };
+}
+export function postBlog(blog) {
+  return (dispatch)=>{
+    dispatch({type:POST_BLOG,payload:blog})
+  }
+}
 export function deleteBlog(blogId){
   return (dispatch)=>{
     dispatch({type:DELETE_BLOG,payload:blogId})
   }
+}
+export function editBlog (updatedBlog){
+return (dispatch)=>{
+  dispatch({type:EDIT_BLOG,payload:updatedBlog})
+}
 }

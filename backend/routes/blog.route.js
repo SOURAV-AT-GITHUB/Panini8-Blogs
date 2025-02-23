@@ -69,7 +69,6 @@ BlogRouter.get("/my-blogs", verifyToken, async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 });
-
 BlogRouter.delete("/:blog_id", verifyToken, async (req, res) => {
   const { blog_id } = req.params;
   const session = await mongoose.startSession();
@@ -101,7 +100,35 @@ BlogRouter.delete("/:blog_id", verifyToken, async (req, res) => {
     session.endSession();
   }
 });
-
+BlogRouter.patch("/:blog_id", verifyToken, async (req, res) => {
+  const { blog_id } = req.params;
+  const { title, content, tags } = req.body;
+  const session = await mongoose.startSession();
+  try {
+    session.startTransaction();
+    const patchedBlog = await BlogModel.findByIdAndUpdate(blog_id, {
+      title,
+      content,
+      tags,
+    },{new:true}).session(session);
+    if (!patchedBlog) {
+      throw new Error("Blog not found");
+    }
+    if (patchedBlog.author.toString() !== req.user.id.toString()) {
+      session.abortTransaction();
+      return res
+        .status(401)
+        .json({ message: "You are no authorized to update this blog" });
+    }
+    await session.commitTransaction();
+    return res.json({ message: "Blog updated :)",data:patchedBlog });
+  } catch (error) {
+    await session.abortTransaction();
+    return res.status(500).json({ message: error.message });
+  } finally {
+    session.endSession();
+  }
+});
 BlogRouter.post("/like/:id", verifyToken, async (req, res) => {
   try {
     const { id } = req.params;
