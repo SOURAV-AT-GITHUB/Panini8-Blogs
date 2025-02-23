@@ -1,5 +1,3 @@
-import ThumbUpIcon from "@mui/icons-material/ThumbUp";
-import CommentIcon from "@mui/icons-material/Comment";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Dialog from "@mui/material/Dialog";
@@ -78,7 +76,6 @@ export default function BlogWithActions({ blog, token }) {
       closeDeleteDialog();
       dispatch(deleteBlog(blog._id));
     } catch (error) {
-      console.log(error);
       dispatch(
         openSnackbar(error.response?.data.message || error.message, "error")
       );
@@ -91,7 +88,9 @@ export default function BlogWithActions({ blog, token }) {
     setIsSubmitting(true);
     try {
       const response = await axios.patch(
-        `${BACKEND_URL}/blog/${blog._id.toString()}`,formData,{headers:{Authorization:`Bearer ${token}`}}
+        `${BACKEND_URL}/blog/${blog._id.toString()}`,
+        formData,
+        { headers: { Authorization: `Bearer ${token}` } }
       );
       closeConfirmEditDialog();
       closeEditDialog();
@@ -122,18 +121,22 @@ export default function BlogWithActions({ blog, token }) {
         </div>
       </div>
 
-
-        <div className="flex justify-between items-center gap-6 min-w-1/5 p-2">
-          <button onClick={openEditDialog} className="bg-yellow-400 text-white p-1 rounded-md w-2/4">
-            <EditNoteIcon fontSize="large" />
-            <p>Edit</p>
-          </button>
-          <button onClick={openDeleteDialog} className="bg-red-500 text-white p-1 rounded-md w-2/4">
-            <DeleteIcon fontSize="large" />
-            <p>Delete</p>
-          </button>
-        </div>
-      
+      <div className="flex justify-between items-center gap-6 min-w-1/5 p-2">
+        <button
+          onClick={openEditDialog}
+          className="bg-yellow-400 text-white p-1 rounded-md w-2/4"
+        >
+          <EditNoteIcon fontSize="large" />
+          <p>Edit</p>
+        </button>
+        <button
+          onClick={openDeleteDialog}
+          className="bg-red-500 text-white p-1 rounded-md w-2/4"
+        >
+          <DeleteIcon fontSize="large" />
+          <p>Delete</p>
+        </button>
+      </div>
 
       <Dialog open={isDeleteDialogOpen} fullWidth onClose={closeDeleteDialog}>
         <div className="w-full p-4 rounded-md shadow-lg bg-white flex flex-col gap-4">
@@ -186,7 +189,7 @@ export default function BlogWithActions({ blog, token }) {
         </div>
       </Dialog>
 
-      <Dialog open={isEditDialogOpen} onClose={closeEditDialog} fullWidth >
+      <Dialog open={isEditDialogOpen} onClose={closeEditDialog} fullWidth>
         <div className="w-full h-fit p-4 rounded-md shadow-lg  flex flex-col gap-4">
           <div className="flex justify-between gap-6">
             <h4 className="text-2xl font-medium ">Edit Blog</h4>

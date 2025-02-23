@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import AddIcon from "@mui/icons-material/Add";
 import { useSelector, useDispatch } from "react-redux";
-import { getAllBlogs,getBlogsByTag } from "../../Store/blogs.action";
+import { getAllBlogs, getBlogsByTag } from "../../Store/blogs.action";
 import Blog from "../../components/Blog";
 import BlogSkeleton from "../../components/BlogSkeleton";
 // const sampleBlog =     {
@@ -38,22 +38,22 @@ export default function Home() {
   const { isLoading, isError, blogs } = useSelector((store) => store.allBlogs);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [searchTag,setSearchTag] = useState("")
-  const [heading,setHeading] = useState("Latest Blogs")
+  const [searchTag, setSearchTag] = useState("");
+  const [heading, setHeading] = useState("Latest Blogs");
   /*_________Pure function___________ */
   function validateTag(str) {
     if (!str) return true;
     const regex = /^[A-Za-z0-9]+$/;
-    return regex.test(str) 
+    return regex.test(str);
   }
-  function refreshFeed(){
-    setHeading("Latest Blogs")
-    dispatch(getAllBlogs(token))
+  function refreshFeed() {
+    setHeading("Latest Blogs");
+    dispatch(getAllBlogs(token));
   }
-  function handleSeachByTag(event){
-    event.preventDefault()
-    dispatch(getBlogsByTag(token,searchTag))
-    setHeading(`Showing blogs with #${searchTag}`)
+  function handleSeachByTag(event) {
+    event.preventDefault();
+    dispatch(getBlogsByTag(token, searchTag));
+    setHeading(`Showing blogs with #${searchTag}`);
   }
   /*___________useEffects____________ */
   useEffect(() => {
@@ -63,7 +63,7 @@ export default function Home() {
   }, [token]);
 
   return (
-    <main className="z-0 mt-15 pt-3 flex gap-4 px-20 h-[90vh] overflow-hidden">
+    <main className="z-0 mt-16 pt-3 flex gap-4  lg:px-16 h-[90vh] overflow-hidden">
       <section className="bg-white w-1/5 h-fit p-4 py-5 rounded-md flex flex-col gap-4 border border-slate-300 shadow-xl">
         <p className="text-primary text-2xl font-semibold text-center">
           Hello, {first_name} {last_name}
@@ -98,7 +98,9 @@ export default function Home() {
                 type="text"
                 required
                 value={searchTag}
-                onChange={(e)=> validateTag(e.target.value)&&setSearchTag(e.target.value) }
+                onChange={(e) =>
+                  validateTag(e.target.value) && setSearchTag(e.target.value)
+                }
                 className="border border-slate-300 rounded-md py-1 px-2"
               />
               <button
@@ -127,7 +129,7 @@ export default function Home() {
               <Blog blog={blog} userId={id} token={token} key={index} />
             ))
           ) : (
-            <h3  className="absolute top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4 min-h-[200px] max-w-full text-red-500  text-4xl font-semibold  p-1">
+            <h3 className="absolute top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4 min-h-[200px] max-w-full text-red-500  text-4xl font-semibold  p-1">
               {isError ? isError : "No Blogs found"}
             </h3>
           )}

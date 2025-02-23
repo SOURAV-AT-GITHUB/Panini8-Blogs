@@ -20,7 +20,6 @@ export default function SingleBlog() {
   const navigate = useNavigate();
   const { blog_id } = useParams();
   const [blog, setBlog] = useState(null);
-  // console.log(blog);
   const [isFetching, setIsFetching] = useState(true);
   const [isToggling, setIsToggling] = useState(false);
   const [isSumbitting, setIsSubmitting] = useState(false);
@@ -45,7 +44,6 @@ export default function SingleBlog() {
         headers: { Authorization: `Bearer ${token}` },
       });
       setBlog(response.data.data);
-      console.log(response.data);
     } catch (error) {
       dispatch(
         openSnackbar(error.response?.data.message || error.message, "error")
@@ -161,7 +159,7 @@ export default function SingleBlog() {
                   className="m-auto min-h-[300px]"
                 />
               )} */}
-              <p >{blog.content}</p>
+              <p>{blog.content}</p>
               <div className="flex justify-evenly gap-8 p-4 pb-2">
                 <button
                   onClick={toggleLike}
@@ -195,29 +193,28 @@ export default function SingleBlog() {
 
             <section className="relative p-2 border flex flex-col gap-2 border-slate-300 rounded-sm  ">
               <section className="sticky top-15 p-3 rounded-md bg-white">
-              <h4 className=" text-2xl font-medium">Comments</h4>
-              <form
-                id="comment-form"
-                onSubmit={postComment}
-                className="flex items-center gap-2 mt-2"
-              >
-                <textarea
-                placeholder="Comment"
-                  className="w-5/6 pl-2 pt-4 border border-slate-400 rounded-md min-h-14 max-h-24"
-                ></textarea>
-                <button
-                  type="submit"
-                  disabled={isSumbitting}
-                  className="w-1/6 text-lg  self-end p-2 rounded-2xl bg-primary text-white"
+                <h4 className=" text-2xl font-medium">Comments</h4>
+                <form
+                  id="comment-form"
+                  onSubmit={postComment}
+                  className="flex items-center gap-2 mt-2"
                 >
-                  {isSumbitting ? (
-                    <CircularProgress color="" />
-                  ) : (
-                    <SendIcon fontSize="large" />
-                  )}
-                </button>
-              </form>
-
+                  <textarea
+                    placeholder="Comment"
+                    className="w-5/6 pl-2 pt-4 border border-slate-400 rounded-md min-h-14 max-h-24"
+                  ></textarea>
+                  <button
+                    type="submit"
+                    disabled={isSumbitting}
+                    className="w-1/6 text-lg  self-end p-2 rounded-2xl bg-primary text-white"
+                  >
+                    {isSumbitting ? (
+                      <CircularProgress color="" />
+                    ) : (
+                      <SendIcon fontSize="large" />
+                    )}
+                  </button>
+                </form>
               </section>
               <section className="flex flex-col gap-2  ">
                 {blog.comments.map((comment, index) => (
@@ -250,7 +247,6 @@ export default function SingleBlog() {
                   </div>
                 ))}
               </section>
-              
             </section>
           </section>
         ) : (
