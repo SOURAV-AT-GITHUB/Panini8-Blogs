@@ -49,9 +49,10 @@ UserRouter.post("/signin", async (req, res) => {
         message: "Login success.",
         data: {
           token,
+          id:existUser._id,
           email: existUser.email,
           first_name: existUser.first_name,
-          last_name: existUser,
+          last_name: existUser.last_name,
           gender: existUser.gender,
         },
       });
