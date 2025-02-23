@@ -1,0 +1,24 @@
+.blog-container::-webkit-scrollbar-track
+{
+	border: 1px solid var(--color-primary);
+	background-color: #F5F5F5;
+    border-radius: 15px;
+    margin-left: 5px;
+}
+.blog-container::-webkit-scrollbar
+{
+	width: 8px;
+	background-color: #F5F5F5;
+}
+.blog-container::-webkit-scrollbar-thumb
+{
+	background-color: var(--color-primary);	
+    border-radius: 10px;
+}
+button{
+	cursor: pointer;
+}
+button:disabled{
+	cursor: progress;
+	opacity: 0.5;
+}

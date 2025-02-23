@@ -3,7 +3,7 @@ import logo from "/Other-files/logo.webp";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { openSnackbar } from "../../Store/actions";
-import {handleSingIn,handleSingOut} from '../../Store/actions'
+import {handleSingIn} from '../../Store/actions'
 import { CircularProgress } from "@mui/material";
 export default function SignIn() {
     /*___________States and hooks___________ */
@@ -19,6 +19,7 @@ const handleSubmit = async (event)=>{
     /*_______useEffects___________ */
     useEffect(() => {
       if (token) navigate("/");
+          document.title = "Sign In | panini 8 blogs"
     }, [token,navigate]);
   return (
     <main id="signin-container" className="relative min-h-screen">
@@ -89,7 +90,7 @@ const handleSubmit = async (event)=>{
             </div>
             <button
               type="submit"
-              className="bg-primary text-white w-full p-2 rounded-full cursor-pointer"
+              className="bg-primary text-white w-full p-2 rounded-full"
             >
               {isLoading ? (
                               <CircularProgress color="" />

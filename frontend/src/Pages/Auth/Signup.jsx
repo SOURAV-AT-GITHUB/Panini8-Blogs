@@ -36,6 +36,7 @@ export default function Signup() {
   /*_______useEffects___________ */
   useEffect(() => {
     if (token) navigate("/");
+              document.title = "Sign Up | panini 8 blogs"
   }, [token, navigate]);
   return (
     <main id="signup-container" className="relative min-h-screen">
@@ -155,7 +156,7 @@ export default function Signup() {
             </div>
             <button
               type="submit"
-              className="bg-primary text-white w-full p-2 rounded-full cursor-pointer disabled:opacity-50 disabled:cursor-progress"
+              className="bg-primary text-white w-full p-2 rounded-full "
               disabled={isLoading}
             >
               {isLoading ? (
