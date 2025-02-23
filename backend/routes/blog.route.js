@@ -155,4 +155,17 @@ BlogRouter.post("/unlike/:id", verifyToken, async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 });
+
+BlogRouter.get("/blog-by-tag/:tag",verifyToken,async(req,res)=>{
+  const {tag} = req.params
+  try {
+    const blogs = await BlogModel.find({
+      tags: { $regex: new RegExp(`^${tag}$`, 'i') }  // Case-insensitive match
+    });
+    if(!blogs.length || !blogs) return res.status(404).json({message:`No blogs found with "${tag}" tag!`})
+      return res.json({message: `${blogs.length} blogs found with "${tag}" tag .`,data:blogs})
+  } catch (error) {
+    return res.status(500).json({message:error.message})
+  }
+})
 module.exports = BlogRouter;

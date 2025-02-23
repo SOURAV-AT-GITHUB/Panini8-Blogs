@@ -1,6 +1,7 @@
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import CommentIcon from "@mui/icons-material/Comment";
 import ShareIcon from "@mui/icons-material/Share";
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import { useDispatch } from "react-redux";
 import { openSnackbar } from "../Store/actions";
 import { likeBlog, unlikeBlog } from "../Store/blogs.action";
@@ -68,7 +69,7 @@ export default function Blog({ blog,userId, token }) {
         {blog.tags.map((tag) => (
           <span
             key={tag}
-            className="ml-1 text-primary  px-1  underline cursor-pointer"
+            className="ml-1 text-blue-500  px-1  underline cursor-pointer"
           >
             #{tag}
           </span>
@@ -81,7 +82,7 @@ export default function Blog({ blog,userId, token }) {
                   className="m-auto min-h-[300px]"
                 />
               )} */}
-      <p className=" line-clamp-2 ">{blog.content}</p>
+      <p className="line-clamp-2">{blog.content}</p>
       <div className="flex justify-evenly gap-8 p-4 pb-2">
         <button
           onClick={toggleLike}
@@ -98,10 +99,14 @@ export default function Blog({ blog,userId, token }) {
             {blog.likes.length} Like{blog.likes.length > 1 && "'s"}
           </p>
         </button>
-        <button className="flex flex-col items-center gap-2 p-1">
+        <a href={`/blog/${blog._id.toString()}`} className="flex flex-col items-center gap-2 p-1">
           <CommentIcon fontSize="large" />
           <p>Comment</p>
-        </button>
+        </a>
+        <a href={`/blog/${blog._id.toString()}`} className="flex flex-col items-center gap-2 p-1">
+          <VisibilityIcon fontSize="large" />
+          <p>Read full article</p>
+        </a>
         <button className="flex flex-col items-center gap-2 p-1">
           <ShareIcon fontSize="large" />
           <p>Share</p>

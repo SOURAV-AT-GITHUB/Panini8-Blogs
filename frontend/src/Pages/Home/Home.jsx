@@ -1,8 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import AddIcon from "@mui/icons-material/Add";
 import { useSelector, useDispatch } from "react-redux";
-import { getAllBlogs } from "../../Store/blogs.action";
+import { getAllBlogs,getBlogsByTag } from "../../Store/blogs.action";
 import Blog from "../../components/Blog";
 import BlogSkeleton from "../../components/BlogSkeleton";
 // const sampleBlog =     {
@@ -38,7 +38,23 @@ export default function Home() {
   const { isLoading, isError, blogs } = useSelector((store) => store.allBlogs);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const [searchTag,setSearchTag] = useState("")
+  const [heading,setHeading] = useState("Latest Blogs")
+  /*_________Pure function___________ */
+  function validateTag(str) {
+    if (!str) return true;
+    const regex = /^[A-Za-z0-9]+$/;
+    return regex.test(str) 
+  }
+  function refreshFeed(){
+    setHeading("Latest Blogs")
+    dispatch(getAllBlogs(token))
+  }
+  function handleSeachByTag(event){
+    event.preventDefault()
+    dispatch(getBlogsByTag(token,searchTag))
+    setHeading(`Showing blogs with #${searchTag}`)
+  }
   /*___________useEffects____________ */
   useEffect(() => {
     document.title = "Home | panini 8 blogs";
@@ -62,7 +78,7 @@ export default function Home() {
         <ul className="flex flex-col gap-2">
           <li>
             <button
-              onClick={() => dispatch(getAllBlogs(token))}
+              onClick={refreshFeed}
               className=" text-primary p-1 px-2 rounded-md border border-primary hover:scale-110 transition-transform duration-200 ease-in-out"
             >
               Refresh feed
@@ -76,12 +92,18 @@ export default function Home() {
             </NavLink>
           </li>
           <li className="flex flex-col gap-2">
-            <p>Get blogs by tags</p>
-            <form action="" className="flex gap-2">
-              <input type="text" required className="border border-slate-300" />
+            <p>Get blogs by tag</p>
+            <form onSubmit={handleSeachByTag} className="flex flex-col gap-2">
+              <input
+                type="text"
+                required
+                value={searchTag}
+                onChange={(e)=> validateTag(e.target.value)&&setSearchTag(e.target.value) }
+                className="border border-slate-300 rounded-md py-1 px-2"
+              />
               <button
                 type="submit"
-                className="bg-primary text-white px-2 rounded-full"
+                className="bg-primary text-white py-1 px-2 rounded-full"
               >
                 Search
               </button>
@@ -92,10 +114,10 @@ export default function Home() {
 
       <section className="w-4/5 bg-white  rounded-md flex flex-col border border-slate-300 shadow-xl">
         <h2 className="text-3xl text-center text-primary font-semibold shadow-md p-2 ">
-          Latest Blogs
+          {heading}
         </h2>
 
-        <div className="blog-container m-2 mr-0 flex flex-col gap-4 overflow-y-auto  ">
+        <div className="blog-container relative m-2 mr-0 flex flex-col gap-4 overflow-y-auto h-full max-w-full">
           {isLoading ? (
             Array.from({ length: 3 }).map((_, index) => (
               <BlogSkeleton key={index} />
@@ -105,7 +127,7 @@ export default function Home() {
               <Blog blog={blog} userId={id} token={token} key={index} />
             ))
           ) : (
-            <h3 className="text-3xl font-medium text-center p-1">
+            <h3  className="absolute top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4 min-h-[200px] max-w-full text-red-500  text-4xl font-semibold  p-1">
               {isError ? isError : "No Blogs found"}
             </h3>
           )}
