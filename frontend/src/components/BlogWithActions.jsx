@@ -108,13 +108,14 @@ export default function BlogWithActions({ blog, token }) {
   return (
     <div className="flex flex-col sm:flex-row justify-between mr-1 gap-2 p-2 border border-slate-300 rounded-md ">
       <div className="flex flex-col gap-2">
-        <h4 className="text-xl font-medium">Blog title : {blog.title}</h4>
-        <div className="flex text-xs">
+        <h4 className="text-2xl font-medium">Blog title : {blog.title}</h4>
+        <p className="line-clamp-2 text-lg">{blog.content}</p>
+        <div className="flex font-medium">
           <p>Published on : </p>
           <p>{formatDateTime(blog.createdAt)[0]}</p>
           <p>{formatDateTime(blog.createdAt)[1]}</p>
         </div>
-        <div className="flex text-xs">
+        <div className="flex font-medium">
           <p>Last Interaction : </p>
           <p>{formatDateTime(blog.updatedAt)[0]}</p>
           <p>{formatDateTime(blog.updatedAt)[1]}</p>
