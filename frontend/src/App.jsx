@@ -11,6 +11,7 @@ import HomeRedirect from "./Pages/HomeRedirect";
 import { Alert, Snackbar } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import {  closeSnackbar } from "./Store/actions";
+import SingleBlog from "./Pages/Create-Blog/SingleBlog";
 function App() {
   const location = useLocation()
   const { isOpen, message, severity } = useSelector((store) => store.snackbar);
@@ -24,6 +25,7 @@ function App() {
         <Route path="/create-blog" element={<CreateBlog />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/signin" element={<SignIn />} />
+        <Route path="/blog/:blog_id" element={<SingleBlog />} />
         <Route path="*" element={<HomeRedirect />} />
 
       </Routes>

@@ -25,3 +25,16 @@ button:disabled{
 .edit-form-button:disabled{
 	cursor: not-allowed;
 }
+#comment-form>textarea {
+	overflow: hidden;  
+	/* resize: none;     */
+  }
+  
+  #comment-form>textarea::-webkit-scrollbar {
+	display: none; 
+  }
+  
+  #comment-form>textarea {
+	-ms-overflow-style: none; 
+	scrollbar-width: none; 
+  }
