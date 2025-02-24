@@ -55,7 +55,7 @@ export default function CreateBlog() {
   }, [token]);
   return (
     <main className="z-0 mt-15 pt-3 flex flex-col items-center gap-4 px-2 lg:px-16 h-[90vh] overflow-hidden">
-      <section className="bg-white border border-slate-300 w-full max-w-lg p-2 rounded-md shadow-md">
+      <section className="bg-white border border-slate-300 w-full max-w-[768px] p-2 rounded-md shadow-md">
         <h2 className="text-center text-3xl font-semibold text-primary">
           Create a new Blog
         </h2>
@@ -75,7 +75,7 @@ export default function CreateBlog() {
               type="text"
               required
               placeholder="Enter blog content"
-              className="border border-slate-400 p-2 min-h-20 rounded-md"
+              className="border border-slate-400 p-2 min-h-[100px] max-h-[200px] rounded-md"
             />
           </div>
           {/* <div className="flex flex-col gap-2">
