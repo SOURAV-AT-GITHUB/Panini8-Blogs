@@ -29,6 +29,7 @@ export default function Signup() {
       navigate("/signin");
     } catch (error) {
       dispatch(openSnackbar(error.response?.data.message||error.message, "error"));
+      if(error.status === 400) navigate ('/signin')
     } finally {
       setIsLoading(false);
     }

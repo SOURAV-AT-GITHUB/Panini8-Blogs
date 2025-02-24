@@ -7,6 +7,8 @@ const JWT_SECRET = process.env.JWT_SECRET;
 UserRouter.post("/signup", async (req, res) => {
   try {
     const { email, password, first_name, last_name, gender } = req.body;
+    const isExist = await UserModel.findOne({email})
+    if(isExist) return res.status(400).json({message:`Email already registered`})
     bcrypt.hash(password,3, async (err, hash) => {
       if (err) return res.status(500).json({ message: err.message });
       const newUser = new UserModel({
