@@ -6,7 +6,6 @@ const blogSchema = new mongoose.Schema({
     tags:[{type:String}],
     author: { type: mongoose.Schema.Types.ObjectId, ref: 'user', required: true },
     likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'user' }],
-    // comments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'comment' }],
   }, { timestamps: true });
 
   const BlogsModel = mongoose.model('blog', blogSchema);

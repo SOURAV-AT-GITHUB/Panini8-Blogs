@@ -142,7 +142,7 @@ BlogRouter.get("/blog-by-tag/:tag", verifyToken, async (req, res) => {
   const { tag } = req.params;
   try {
     const blogs = await BlogModel.find({
-      tags: { $regex: new RegExp(`^${tag}$`, "i") }, // Case-insensitive match
+      tags: { $regex: new RegExp(`${tag}$`, "i") }, 
     }).populate({
       path:"author",
       select:"first_name last_name image"
