@@ -170,7 +170,7 @@ BlogRouter.get("/:blog_id", verifyToken, async (req, res) => {
         select: "first_name last_name image",
       });
     if (!blog) return res.status(400).json({ message: "Blog not found" });
-    const data = { ...blog._doc, comments };
+    const data = { blog, comments };
     return res.json({ message: "Blog Found", data });
   } catch (error) {
     return res.status(500).json({ message: error.message });

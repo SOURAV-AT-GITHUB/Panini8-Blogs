@@ -12,14 +12,16 @@ import ShareIcon from "@mui/icons-material/Share";
 import BlogSkeleton from "../../components/BlogSkeleton";
 import SendIcon from "@mui/icons-material/Send";
 import { CircularProgress } from "@mui/material";
+import { connectSocket, getSocket } from "../../api/socket";
 export default function SingleBlog() {
-  const { token, id, first_name, last_name } = useSelector(
+  const { token, id,first_name,last_name } = useSelector(
     (store) => store.auth
   );
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { blog_id } = useParams();
   const [blog, setBlog] = useState(null);
+  const [comments, setComments] = useState([]);
   const [isFetching, setIsFetching] = useState(true);
   const [isToggling, setIsToggling] = useState(false);
   const [isSumbitting, setIsSubmitting] = useState(false);
@@ -43,7 +45,8 @@ export default function SingleBlog() {
       const response = await axios.get(`${BACKEND_URL}/blog/${blog_id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setBlog(response.data.data);
+      setBlog(response.data.data.blog);
+      setComments(response.data.data.comments);
     } catch (error) {
       dispatch(
         openSnackbar(error.response?.data.message || error.message, "error")
@@ -85,24 +88,21 @@ export default function SingleBlog() {
     event.preventDefault();
     setIsSubmitting(true);
     try {
-      const response = await axios.post(
-        `${BACKEND_URL}/blog/comment/${blog._id.toString()}`,
-        { comment: event.target[0].value },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      dispatch(openSnackbar(response.data.message, "success"));
-      setBlog((prev) => ({
-        ...prev,
-        comments: [
-          ...prev.comments,
-          { ...response.data.data, first_name, last_name, image: null },
-        ],
-      }));
-      event.target[0].value = "";
+      const socket = getSocket()
+      if(!socket) throw new Error("Something went wrong")
+        const comment= {comment:event.target[0].value,author:{first_name,last_name,image:null},createdAt:new Date()}
+        socket.emit('comment',{roomId:blog_id, comment },(response)=>{
+          if(response.success){
+            event.target[0].value = "";
+            setComments(prev=>([comment,...prev]))
+            dispatch(openSnackbar('Comment added','info'))
+          }else{
+
+            dispatch(openSnackbar(response.error,'error'))
+          }
+        })
     } catch (error) {
-      dispatch(
-        openSnackbar(error.response?.data.message || error.message, "error")
-      );
+      dispatch(openSnackbar(error.message,'error'))
     } finally {
       setIsSubmitting(false);
     }
@@ -114,6 +114,35 @@ export default function SingleBlog() {
     if (token) fetchBlog();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token, blog_id]);
+  useEffect(() => {
+    if (!token || !blog) return;
+    connectSocket(token);
+    const socket = getSocket();
+
+    if (socket && token) {
+      socket.on("connect", () => {
+        socket.emit('joinRoom',blog._id.toString(),(response)=>{
+          if(response.success){
+            dispatch(openSnackbar("Live comments enabled", "info"));
+          }else{
+            dispatch(openSnackbar("Something went wrong", "error"));
+          }
+        })
+      });
+      socket.on("disconnect", () => {
+        dispatch(openSnackbar("Live comments disabled", "warming"));
+      });
+      socket.on("connect_error", (err) => {
+        dispatch(openSnackbar(err.message, "error"));
+      });
+      
+      socket.on('comment',(comment)=>{
+        dispatch(openSnackbar('New comment','info'))
+        setComments(prev=>([comment,...prev]))
+      })
+    }
+    // return () => socket?.disconnect();
+  }, [blog]);
   return (
     <main className="relative z-0 mt-15 pt-3 flex flex-col items-center gap-4 px-2 lg:px-16 min-h-[90vh] w-full  ">
       <section className=" relative flex flex-col bg-white  w-full max-w-[768px] p-2">
@@ -217,7 +246,7 @@ export default function SingleBlog() {
                 </form>
               </section>
               <section className="flex flex-col gap-2  ">
-                {blog.comments.map((comment, index) => (
+                {comments.map((comment, index) => (
                   <div
                     key={index}
                     className="flex flex-col gap-2 p-2 border border-slate-300 rounded-md"

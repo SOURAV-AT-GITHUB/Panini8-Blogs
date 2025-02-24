@@ -23,7 +23,7 @@ export default function Profile() {
     if (token) dispatch(getMyBlogs(token));
   }, [token]);
   return (
-    <main className="z-0 mt-15 pt-3 flex flex-col sm:flex-row gap-4 sm:px-20 min-h-[90vh] ">
+    <main className="z-0 mt-18 pt-3 flex flex-col sm:flex-row gap-4 sm:px-20 min-h-[90vh] ">
       <section className="bg-white text-center sm:w-1/4 h-fit p-4 py-5 rounded-md flex flex-col gap-4 border border-slate-300 shadow-xl">
         <img
           src={dummyImage}
