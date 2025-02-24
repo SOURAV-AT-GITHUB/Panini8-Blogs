@@ -171,16 +171,16 @@ export default function SingleBlog() {
                 </div>
               </div>
               <h2 className="text-lg font-medium">{blog.title}</h2>
-              <p>
+              <div>
                 {blog.tags.map((tag) => (
-                  <span
+                  <p
                     key={tag}
                     className="ml-1 text-blue-500  px-1  underline cursor-pointer"
                   >
                     #{tag}
-                  </span>
+                  </p>
                 ))}
-              </p>
+              </div>
               {/* {blog.image && (
                 <img
                   src={blog.image}
